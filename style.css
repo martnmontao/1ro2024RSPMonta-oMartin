@@ -1,0 +1,225 @@
+
+body {
+    background-color: rgba(255, 0, 0, 0.5);; 
+    color: #ffffff; 
+    font-family: Arial, sans-serif; 
+    margin: 0;
+    padding: 0;
+}
+
+#spinner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 0, 0, 0.5);
+    z-index: 20000; 
+}
+
+#spinner .loader {
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#spinner .circle {
+    width: 80px; 
+    height: 80px; 
+    border: 4px solid transparent; 
+    border-top-color: black; 
+    border-radius: 50%;
+    animation: spin 1s linear infinite; 
+    margin-bottom: 20px; 
+}
+
+#spinner .loading-text {
+    color: black; 
+    font-size: 24px; 
+    margin-top: 10px; 
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+
+
+#formularioLista {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%; 
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    
+
+}
+
+
+#formularioLista button {
+    margin-top: 15px; 
+    margin-bottom: 5px; 
+    padding: 10px 20px;
+    background-color: #990000; /* Azul oscuro */
+    color: #ffffff; 
+    border: 3px solid black; 
+    cursor: pointer;
+    border-radius: 20px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+    font-family: 'Arial', sans-serif; 
+    width: 300px;
+}
+
+#formularioLista button:hover {
+    background-color: black; 
+}
+
+#formularioLista table {
+    margin-top: 10px; 
+}
+
+#tablaElementos {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #990000; 
+    border-radius: 8px;
+   
+    color: #ffffff; 
+}
+
+#tablaElementos th,
+#tablaElementos td {
+    border: 2px solid black; 
+    padding: 10px;
+    text-align: center;
+    font-family: 'Arial', sans-serif; 
+}
+
+#tablaElementos th {
+    background-color: #990000; 
+}
+
+
+#formularioABM {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #990000; 
+    box-shadow: 1 2px 4px rgba(0, 0, 0, 0.1);
+    width: 80%; 
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1600px; 
+    color: #ffffff; 
+    font-family: 'Arial', sans-serif; 
+    font-size: 25px;
+}
+
+#formularioABM label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff; 
+    font-family: 'Arial', sans-serif; 
+}
+
+#formularioABM input {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid black; 
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 20px;
+    background-color: #990000; 
+    color: #ffffff; 
+}
+
+
+
+#formularioABM button:hover {
+    background-color: #990000; 
+}
+
+
+#formularioABM #tipo-label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff; 
+    font-family: 'Arial', sans-serif; 
+}
+
+#formularioABM #tipo {
+    width: calc(100% - 16px);
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid black; 
+    border-radius: 3px;
+    box-sizing: border-box;
+    font-size: 14px;
+    background-color: #990000; 
+    color: #ffffff; 
+    font-family: 'Arial', sans-serif; 
+}
+
+
+#formularioABM #tipo:focus {
+    outline: none; 
+    border-color: #ffffff;
+}
+
+#botonesABM {
+
+    margin-top: 20px;
+   
+
+     
+}
+
+#aceptar-btn
+{
+    margin-left: 480px;
+    width: 300px;
+}
+
+
+#cancelar-btn
+{
+
+    margin-left: 600px;
+    width: 300px;
+
+}
+
+#formularioABM #aceptar-btn,
+#formularioABM #cancelar-btn {
+    min-width: 120px;
+    padding: 10px 20px;
+    background-color: #990000; 
+    color: #ffffff; 
+    border: 1px solid black;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    font-family: 'Arial', sans-serif; 
+}
+
+#formularioABM #aceptar-btn:hover,
+#formularioABM #cancelar-btn:hover {
+    background-color: black; 
+}
+
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,550 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario ABM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="spinner">
+        <div class="loader">
+            <div class="circle"></div>
+            <div class="loading-text">Cargando</div>
+        </div>
+    </div>
+
+
+    <div id="formularioLista">
+        <table id="tablaElementos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Edad</th>
+                    <th>Alter ego</th>
+                    <th>Ciudad</th>
+                    <th>Publicado</th>
+                    <th>Enemigo</th>
+                    <th>Robos</th>
+                    <th>Asesinatos</th>
+                    <th>MODIFICAR   |   ELIMINAR</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="mostrarFormularioAlta()">Agregar Elemento</button>
+    </div>
+
+    <div id="formularioABM" class="hidden">
+        <h2 id="accionABM">Alta</h2>
+        <form id="formABM">
+            <input type="hidden" id="id">
+            <div id="nombre-container">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" required><br>
+            </div>
+            <div id="apellido-container">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" required><br>
+            </div>
+            <div id="edad-container">
+                <label for="edad">Edad:</label>
+                <input type="text" id="edad" required><br>
+            </div>
+            <div id="tipo-container">
+                <label id="tipo-label" for="tipo">Tipo:</label>
+                <select id="tipo" onchange="mostrarCamposTipo()">
+                    <option value="">Tipo</option>
+                    <option value="heroe">Heroe</option>
+                    <option value="villano">Villano</option>
+                </select><br>
+            </div>
+            <div id="alterEgo-container" class="hidden">
+                <label for="alterEgo">Alter Ego:</label>
+                <input type="text" id="alterEgo"><br>
+            </div>
+            <div id="ciudad-container" class="hidden">
+                <label for="ciudad">Ciudad:</label>
+                <input type="text" id="ciudad"><br>
+            </div>
+            <div id="publicado-container" class="hidden">
+                <label for="publicado">Publicado:</label>
+                <input type="text" id="publicado"><br>
+            </div>
+            <div id="enemigo-container" class="hidden">
+                <label for="enemigo">Enemigo:</label>
+                <input type="text" id="enemigo"><br>
+            </div>
+            <div id="robos-container" class="hidden">
+                <label for="robos">Robos:</label>
+                <input type="text" id="robos"><br>
+            </div>
+            <div id="asesinatos-container" class="hidden">
+                <label for="asesinatos">Asesinatos:</label>
+                <input type="text" id="asesinatos"><br>
+            </div>
+            <div id="botonesABM"></div>
+                <button id="aceptar-btn" type="button" onclick="aceptarABM()">Aceptar</button>
+                <button id="cancelar-btn" type="button" onclick="cancelarABM()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    
+</body>
+
+
+
+
+
+    <script>
+       class Persona {
+    constructor(id, nombre, apellido, edad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.edad = edad;
+    }
+
+}
+
+class Heroe extends Persona {
+    constructor(id, nombre, apellido, edad, alterEgo, ciudad, publicado) {
+        super(id, nombre, apellido, edad);
+        this.alterEgo = alterEgo;
+        this.ciudad = ciudad;
+        this.publicado = publicado;
+    }
+}
+
+class Villano extends Persona {
+    constructor(id, nombre, apellido, edad, enemigo, robos, asesinatos) {
+        super(id, nombre, apellido, edad);
+        this.enemigo = enemigo;
+        this.robos = robos;
+        this.asesinatos = asesinatos;
+    }
+
+}
+
+
+
+
+
+
+let listaElementos = [];
+
+
+
+
+
+function mostrarSpinner() {
+    document.getElementById('spinner').style.display = 'block';
+}
+function ocultarSpinner() {
+    
+    document.getElementById('spinner').style.display = 'none';
+}
+
+
+function mostrarFormularioLista() {
+    
+    document.getElementById('formularioLista').classList.remove('hidden');
+    document.getElementById('formularioABM').classList.add('hidden');
+    document.getElementById('spinner').style.display = 'none';
+    renderizarTabla();
+}
+
+function mostrarFormularioABM(accion, elemento = {}) {
+    
+    document.getElementById('accionABM').textContent = accion;
+
+    
+    document.getElementById('formularioLista').classList.add('hidden');
+    document.getElementById('formularioABM').classList.remove('hidden');
+
+    
+    document.getElementById('tipo-container').style.display = 'none';
+
+    
+    document.getElementById('id').value = elemento.id || '';
+    document.getElementById('nombre').value = elemento.nombre || '';
+    document.getElementById('apellido').value = elemento.apellido || '';
+    document.getElementById('edad').value = elemento.edad || '';
+
+    
+    const alterEgoContainer = document.getElementById('alterEgo-container');
+    const alterEgoInput = document.getElementById('alterEgo');
+    const enemigoContainer = document.getElementById('enemigo-container');
+    const enemigoInput = document.getElementById('enemigo');
+
+    const ciudadContainer = document.getElementById('ciudad-container');
+    const ciudadInput = document.getElementById('ciudad');
+
+    const publicadoContainer = document.getElementById('publicado-container');
+    const publicadoInput = document.getElementById('publicado');
+
+    const robosContainer = document.getElementById('robos-container');
+    const robosInput = document.getElementById('robos');
+
+    const asesinatosContainer = document.getElementById('asesinatos-container');
+    const asesinatosInput = document.getElementById('asesinatos');
+    
+
+    
+    if ('alterEgo' in elemento) {
+        
+        alterEgoContainer.style.display = 'block';
+        alterEgoInput.value = elemento.alterEgo || '';
+
+        ciudadContainer.style.display = 'block';
+        ciudadInput.value = elemento.ciudad || '';
+
+        publicadoContainer.style.display = 'block';
+        publicadoInput.value = elemento.publicado || '';
+
+        enemigoContainer.style.display = 'none';
+        enemigoInput.value = elemento.enemigo || '';
+
+        robosContainer.style.display = 'none';
+        robosInput.value = elemento.robos || '';
+
+        asesinatosContainer.style.display = 'none';
+        asesinatosInput.value = elemento.asesinatos || '';
+
+    } else if ('enemigo' in elemento) {
+        
+        alterEgoContainer.style.display = 'none';
+        alterEgoInput.value = elemento.alterEgo || '';
+
+        ciudadContainer.style.display = 'none';
+        ciudadInput.value = elemento.ciudad || '';
+
+        publicadoContainer.style.display = 'none';
+        publicadoInput.value = elemento.publicado || '';
+
+        enemigoContainer.style.display = 'block';
+        enemigoInput.value = elemento.enemigo || '';
+
+        robosContainer.style.display = 'block';
+        robosInput.value = elemento.robos || '';
+
+        asesinatosContainer.style.display = 'block';
+        asesinatosInput.value = elemento.asesinatos || '';
+
+    } else {
+        
+        alterEgoContainer.style.display = 'none';
+        alterEgoInput.value = elemento.alterEgo || '';
+
+        ciudadContainer.style.display = 'none';
+        ciudadInput.value = elemento.ciudad || '';
+
+        publicadoContainer.style.display = 'none';
+        publicadoInput.value = elemento.publicado || '';
+
+        enemigoContainer.style.display = 'none';
+        enemigoInput.value = elemento.enemigo || '';
+
+        robosContainer.style.display = 'none';
+        robosInput.value = elemento.robos || '';
+
+        asesinatosContainer.style.display = 'none';
+        asesinatosInput.value = elemento.asesinatos || '';
+    }
+}
+
+function mostrarFormularioAlta() {
+    mostrarFormularioABM('Alta');
+    document.getElementById('nombre-container').style.display = 'block';
+    document.getElementById('apellido-container').style.display = 'block';
+    document.getElementById('edad-container').style.display = 'block';
+    document.getElementById('tipo-container').style.display = 'block';
+    document.getElementById('alterEgo-container').style.display = 'none';
+    document.getElementById('ciudad-container').style.display = 'none';
+    document.getElementById('publicado-container').style.display = 'none';
+    document.getElementById('enemigo-container').style.display = 'none';
+    document.getElementById('robos-container').style.display = 'none';
+    document.getElementById('aseinatos-container').style.display = 'none';
+}
+
+function mostrarCamposTipo() {
+    const tipoSelect = document.getElementById('tipo').value;
+    const alterEgoContainer = document.getElementById('alterEgo-container');
+    const ciudadContainer = document.getElementById('ciudad-container');
+    const publicadoContainer = document.getElementById('publicado-container');
+    const enemigoContainer = document.getElementById('enemigo-container');
+    const robosContainer = document.getElementById('robos-container');
+    const asesinatosContainer = document.getElementById('asesinatos-container');
+
+    const aceptarBtn = document.getElementById('aceptar-btn');
+    const cancelarBtn = document.getElementById('cancelar-btn');
+
+    if (tipoSelect === 'heroe') {
+        alterEgoContainer.style.display = 'block';
+        ciudadContainer.style.display = 'block';
+        publicadoContainer.style.display = 'block';
+        enemigoContainer.style.display = 'none';
+        robosContainer.style.display = 'none';
+        asesinatosContainer.style.display = 'none';
+
+        aceptarBtn.style.display = 'block';
+        cancelarBtn.style.display = 'block';
+    } else if (tipoSelect === 'villano') {
+        alterEgoContainer.style.display = 'none';
+        ciudadContainer.style.display = 'none';
+        publicadoContainer.style.display = 'none';
+        enemigoContainer.style.display = 'block';
+        robosContainer.style.display = 'block';
+        asesinatosContainer.style.display = 'block';
+
+        aceptarBtn.style.display = 'block';
+        cancelarBtn.style.display = 'block';
+    } else {
+        alterEgoContainer.style.display = 'none';
+        ciudadContainer.style.display = 'none';
+        publicadoContainer.style.display = 'none';
+        enemigoContainer.style.display = 'none';
+        robosContainer.style.display = 'none';
+        asesinatosContainer.style.display = 'none';
+
+        aceptarBtn.style.display = 'none';
+        cancelarBtn.style.display = 'none';
+    }
+    aceptarBtn.style.float = 'left';
+    aceptarBtn.style.marginRight = '10px';
+}
+
+function renderizarTabla() {
+    const tbody = document.getElementById('tablaElementos').getElementsByTagName('tbody')[0];
+    tbody.innerHTML = '';
+    listaElementos.forEach(elemento => {
+        const fila = tbody.insertRow();
+        fila.insertCell().textContent = elemento.id;
+        fila.insertCell().textContent = elemento.nombre;
+        fila.insertCell().textContent = elemento.apellido;
+        fila.insertCell().textContent = elemento.edad;
+        fila.insertCell().textContent = elemento.alterEgo || 'N/A';
+        fila.insertCell().textContent = elemento.ciudad || 'N/A';
+        fila.insertCell().textContent = elemento.publicado || 'N/A';
+        fila.insertCell().textContent = elemento.enemigo || 'N/A';
+        fila.insertCell().textContent = elemento.robos || 'N/A';
+        fila.insertCell().textContent = elemento.asesinatos || 'N/A';
+        
+
+        
+
+        const celdaAcciones = fila.insertCell();
+        const botonModificar = document.createElement('button');
+        botonModificar.textContent = 'Modificar';
+        botonModificar.onclick = () => mostrarFormularioABM('Modificar', elemento);
+        celdaAcciones.appendChild(botonModificar);
+        const botonEliminar = document.createElement('button');
+        botonEliminar.textContent = 'Eliminar';
+        botonEliminar.onclick = () => mostrarFormularioABM('Eliminar', elemento);
+        celdaAcciones.appendChild(botonEliminar);
+    });
+}
+
+function obtenerPersonas() {
+    mostrarSpinner();
+    setTimeout(function() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://examenesutn.vercel.app/api/PersonasHeroesVillanos', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = function() {
+            ocultarSpinner();
+            if (xhr.status ===200 ) {
+                listaElementos = JSON.parse(xhr.responseText);
+                console.log(listaElementos);
+                mostrarFormularioLista();
+            } else {
+                alert('No se pudo obtener la lista de personas.');
+            }
+        };
+        xhr.onerror = function() {
+            ocultarSpinner();
+            alert('Error de red al intentar obtener la lista de personas.');
+        };
+        xhr.send();
+    }, 2000); 
+}
+
+
+function agregarPersona(elemento) {
+    mostrarSpinner();
+
+
+    fetch('https://examenesutn.vercel.app/api/PersonasHeroesVillanos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(elemento)
+    })
+    .then(response => {
+        
+        ocultarSpinner();
+
+        if (!response.ok) {
+            throw new Error('No se pudo agregar la persona.');
+        }
+        return response.json();
+    })
+    .then(respuesta => {
+        elemento.id = respuesta.id; 
+        listaElementos.push(elemento); 
+
+        mostrarFormularioLista();
+    })
+    .catch(error => {
+        console.error('Error al agregar persona:', error);
+        alert('Error al agregar la persona. Por favor, intenta nuevamente.');
+        
+        mostrarFormularioLista();
+    })
+    .finally(() => {
+        ocultarSpinner();
+    });
+}
+
+
+
+
+async function modificarPersona(elemento) {
+    mostrarSpinner();
+
+    try {
+        const response = await fetch('https://examenesutn.vercel.app/api/PersonasHeroesVillanos', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(elemento)
+        });
+
+        ocultarSpinner();
+
+        if (response.status === 200) {
+            const respuesta = await response.text();
+            const encontrado = listaElementos.find(e => e.id === parseInt(elemento.id)); 
+            if (encontrado) {
+                Object.assign(encontrado, elemento); 
+                listaElementos = listaElementos.map(e => {
+                    if (e.id === encontrado.id) {
+                        return Object.assign(e, elemento);
+                    }
+                    return e;
+                });
+
+                console.log('Elemento modificado y reindexado en listaElementos:', encontrado);
+
+                mostrarFormularioLista();
+            } else {
+                throw new Error('Elemento no encontrado en listaElementos');
+            }
+        } else {
+            throw new Error('No se pudo modificar la persona. Estado: ' + response.status);
+        }
+    } catch (error) {
+        console.error('Error al modificar persona:', error);
+        alert('Error al modificar la persona. Por favor, intenta nuevamente.');
+
+        mostrarFormularioLista();
+    } finally {
+        
+        ocultarSpinner();
+    }
+}
+
+
+
+function eliminarPersona(id) {
+    mostrarSpinner();
+
+    setTimeout(function() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('DELETE', 'https://examenesutn.vercel.app/api/PersonasHeroesVillanos', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = function() {
+            ocultarSpinner(); 
+
+            if (xhr.status === 200) {
+                const index = listaElementos.findIndex(e => e.id === parseInt(id));
+                if (index !== -1) {
+                    listaElementos.splice(index, 1); 
+                } else {
+                    console.error('Elemento no encontrado en listaElementos.');
+                }
+
+                
+                mostrarFormularioLista(); 
+            } else {
+                alert('No se pudo eliminar la persona.'); 
+            }
+        };
+
+        xhr.send(JSON.stringify({ id: parseInt(id) }));
+
+    }, 2000);
+}
+
+
+
+
+
+
+function aceptarABM() {
+    const accion = document.getElementById('accionABM').textContent.toLowerCase();
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const edad = document.getElementById('edad').value;
+    const alterEgo = document.getElementById('alterEgo').value;
+    const ciudad = document.getElementById('ciudad').value;
+    const enemigo = document.getElementById('enemigo').value;
+    const robos = document.getElementById('robos').value;
+    const asesinatos = document.getElementById('asesinatos').value;
+    const publicado = document.getElementById('publicado').value;
+    const id = document.getElementById('id').value; 
+
+    
+
+    const elemento = {
+        nombre,
+        apellido,
+        edad, 
+        ...(alterEgo ? { alterEgo, ciudad, publicado } : {}),  
+        ...(enemigo ? { enemigo, robos, asesinatos } : {})  
+    };
+
+    
+
+    if (accion === 'alta') {
+        agregarPersona(elemento);
+    } else if (accion === 'modificar') {
+        elemento.id = id; 
+        modificarPersona(elemento);
+    } else if (accion === 'eliminar') {
+        elemento.id = id;
+
+        eliminarPersona(id);
+    }
+}
+
+
+function cancelarABM() {
+    mostrarFormularioLista();
+}
+
+
+obtenerPersonas();
+
+            
+
+
+
+    </script>
+</body>
+</html>
